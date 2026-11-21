@@ -1,12 +1,17 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mực Xanh</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Trang cá nhân để đăng, lưu và đọc lại các moment viết lách theo dòng thời gian.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231F42B5'/%3E%3Cpath d='M9 23V9l7 9 7-9v14' fill='none' stroke='white' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:wght@400..700&display=swap">
 <style>
 /* Bố cục: một cột như trang vở. Ô soạn có dòng kẻ xanh và lề đỏ nằm trên cùng,
-   dòng thời gian các moment nằm bên dưới, nhóm theo từng ngày. */
+   dòng thời gian các moment nằm bên dưới, nhóm theo từng ngày; mục sao lưu ở cuối trang. */
 :root {
   --paper: #F3F5F9;        /* nền: trắng ngả xanh lạnh */
   --sheet: #FFFFFF;        /* tờ giấy của ô soạn */
@@ -18,25 +23,32 @@
   --accent-ink: #FFFFFF;
   --accent-soft: #E3EAFB;
   --danger: #B3261E;
+  --warn-bg: #FFF4D6;
+  --warn-ink: #5B4300;
   --font-ui: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-write: "Lora", Georgia, "Times New Roman", serif;
   --line: 2rem;            /* khoảng cách giữa hai dòng kẻ */
+  color-scheme: light;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --paper: #0E1424; --sheet: #151D33; --ink: #E4EAFA; --ink-soft: #97A3C4;
     --rule: #263150; --margin: #E5675F; --accent: #8FA8FF; --accent-ink: #0C1230;
-    --accent-soft: #1E2A4E; --danger: #FF8A80; color-scheme: dark;
+    --accent-soft: #1E2A4E; --danger: #FF8A80; --warn-bg: #3A3014; --warn-ink: #F2DDA0; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --paper: #0E1424; --sheet: #151D33; --ink: #E4EAFA; --ink-soft: #97A3C4;
   --rule: #263150; --margin: #E5675F; --accent: #8FA8FF; --accent-ink: #0C1230;
-  --accent-soft: #1E2A4E; --danger: #FF8A80; color-scheme: dark;
+  --accent-soft: #1E2A4E; --danger: #FF8A80; --warn-bg: #3A3014; --warn-ink: #F2DDA0; color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-body { background: var(--paper); color: var(--ink); font: 400 0.96875rem/1.6 var(--font-ui); }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 0.96875rem/1.6 var(--font-ui); }
+[hidden] { display: none !important; }
 button, input, select, textarea { font-family: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -53,7 +65,7 @@ button, input, select, textarea { font-family: inherit; }
 .brand { margin: 0; font: 700 1.875rem/1.15 var(--font-ui); letter-spacing: -.015em; }
 .sub { margin: 0; color: var(--ink-soft); }
 .stats { margin: .25rem 0 0; font-weight: 500; font-variant-numeric: tabular-nums; }
-.ro { margin: 0; color: var(--ink-soft); font-size: .85rem; }
+.warn { margin: .5rem 0 0; padding: .6rem .85rem; border-radius: 6px; background: var(--warn-bg); color: var(--warn-ink); font-size: .85rem; }
 
 /* Trang vở: dòng kẻ xanh, lề đỏ */
 .sheet {
@@ -109,9 +121,10 @@ button, input, select, textarea { font-family: inherit; }
 }
 .btn-primary { background: var(--accent); color: var(--accent-ink); }
 .btn-primary:hover:not(:disabled) { opacity: .9; }
-.btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
 .btn-quiet { background: transparent; color: var(--accent); border-color: var(--rule); }
-.btn-quiet:hover { background: var(--accent-soft); }
+.btn-quiet:hover:not(:disabled) { background: var(--accent-soft); }
+.btn-danger { background: transparent; color: var(--danger); border-color: var(--danger); }
 .btn-sm { padding: .45rem .8rem; font-size: .82rem; }
 .linkbtn {
   background: none; border: 0; padding: .35rem .15rem; color: var(--ink-soft); font-size: .82rem; font-weight: 500;
@@ -181,10 +194,18 @@ button, input, select, textarea { font-family: inherit; }
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .25rem 1rem;
   padding: .6rem .85rem; border: 1px dashed var(--ink-soft); border-radius: 6px; font-size: .85rem; color: var(--ink-soft);
 }
-.slow { font-size: .85rem; margin: 0; }
 
-.foot { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
-.foot p { margin: 0; flex: 1 1 16rem; font-size: .8rem; color: var(--ink-soft); }
+/* Sao lưu dữ liệu */
+.data { display: flex; flex-direction: column; gap: .75rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); }
+.d-h { margin: 0; font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.data p { margin: 0; font-size: .85rem; color: var(--ink-soft); max-width: 65ch; }
+.d-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.imp {
+  display: flex; flex-direction: column; gap: .7rem; padding: .9rem 1rem;
+  border: 1px solid var(--rule); border-radius: 6px; background: var(--sheet);
+}
+.imp p { color: var(--ink); }
+.imp .imp-warn { color: var(--ink-soft); }
 
 .toast {
   position: fixed; z-index: 20; width: fit-content; max-width: calc(100% - 32px); margin: 0 auto;
@@ -194,16 +215,17 @@ button, input, select, textarea { font-family: inherit; }
 }
 @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
 </style>
-
+</head>
+<body>
 <main class="wrap">
   <header class="top">
     <h1 class="brand">Mực Xanh</h1>
     <p class="sub">Nơi giữ lại từng moment viết của mình.</p>
-    <p id="stats" class="stats" aria-live="polite">Đang tải…</p>
-    <p id="readonly" class="ro" hidden>Bạn đang xem ở chế độ chỉ đọc.</p>
+    <p id="stats" class="stats" aria-live="polite"></p>
+    <p id="warn" class="warn" role="status" hidden></p>
   </header>
 
-  <section id="composer" class="composer" aria-labelledby="c-h" hidden>
+  <section id="composer" class="composer" aria-labelledby="c-h">
     <h2 id="c-h" class="vh">Viết moment mới</h2>
     <div class="sheet">
       <input id="c-title" class="t" type="text" placeholder="Tiêu đề (không bắt buộc)" aria-label="Tiêu đề" autocomplete="off" maxlength="120">
@@ -229,38 +251,53 @@ button, input, select, textarea { font-family: inherit; }
     <div id="filters" class="filters" role="group" aria-label="Lọc theo thể loại"></div>
   </div>
 
-  <div id="list" class="list">
-    <div class="note">Đang tải các moment…</div>
-  </div>
+  <div id="list" class="list"></div>
 
-  <footer id="foot" class="foot" hidden>
-    <p>Moment được lưu cùng trang này. Nếu xóa trang thì moment cũng mất, nên thỉnh thoảng hãy tải một bản sao lưu.</p>
-    <button id="backup" type="button" class="btn btn-quiet btn-sm" hidden>Tải bản sao lưu (.md)</button>
-  </footer>
+  <section id="data" class="data" aria-labelledby="d-h">
+    <h2 id="d-h" class="d-h">Sao lưu dữ liệu</h2>
+    <p>Moment được lưu ngay trong trình duyệt này, trên thiết bị này. Xóa dữ liệu duyệt web sẽ làm mất moment, và máy hay trình duyệt khác sẽ không thấy chúng. Hãy xuất file JSON để sao lưu hoặc chuyển sang nơi khác, rồi nhập lại khi cần.</p>
+    <p id="last-exp"></p>
+    <div class="d-actions">
+      <button id="exp" type="button" class="btn btn-primary btn-sm">Xuất JSON</button>
+      <button id="imp" type="button" class="btn btn-quiet btn-sm">Nhập JSON</button>
+      <button id="exp-md" type="button" class="btn btn-quiet btn-sm" hidden>Xuất .md để đọc</button>
+    </div>
+    <div id="imp-panel" class="imp" hidden>
+      <p id="imp-sum"></p>
+      <p id="imp-warn" class="imp-warn"></p>
+      <div class="d-actions">
+        <button type="button" class="btn btn-primary btn-sm" data-imp="merge">Gộp vào hiện tại</button>
+        <button type="button" class="btn btn-danger btn-sm" data-imp="replace">Thay thế toàn bộ</button>
+        <button type="button" class="btn btn-quiet btn-sm" data-imp="cancel">Hủy</button>
+      </div>
+    </div>
+    <input id="imp-file" type="file" accept=".json,application/json" hidden>
+  </section>
 </main>
 <div id="toast" class="toast" role="status" hidden></div>
 
 <script>
 (function () {
   "use strict";
-  document.documentElement.lang = "vi";
 
+  var KEY = "mucxanh:moments";
+  var DRAFT_KEY = "mucxanh:draft";
+  var EXPORT_KEY = "mucxanh:lastExport";
   var KINDS = ["Nhật ký", "Ghi chép", "Thơ", "Truyện ngắn", "Tản văn"];
   var WEEKDAYS = ["Chủ nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
-  var DRAFT_KEY = "mucxanh:draft";
 
   function $(s, r) { return (r || document).querySelector(s); }
   var el = {
-    stats: $("#stats"), ro: $("#readonly"), composer: $("#composer"), cTitle: $("#c-title"), cBody: $("#c-body"),
-    cDate: $("#c-date"), cCount: $("#c-count"), cStatus: $("#c-status"), cPost: $("#c-post"), cKinds: $("#c-kinds"),
+    stats: $("#stats"), warn: $("#warn"), cTitle: $("#c-title"), cBody: $("#c-body"), cDate: $("#c-date"),
+    cCount: $("#c-count"), cStatus: $("#c-status"), cPost: $("#c-post"), cKinds: $("#c-kinds"),
     tools: $("#tools"), q: $("#q"), sort: $("#sort"), filters: $("#filters"), list: $("#list"),
-    foot: $("#foot"), backup: $("#backup"), toast: $("#toast")
+    exp: $("#exp"), imp: $("#imp"), expMd: $("#exp-md"), lastExp: $("#last-exp"), impFile: $("#imp-file"),
+    impPanel: $("#imp-panel"), impSum: $("#imp-sum"), impWarn: $("#imp-warn"), toast: $("#toast")
   };
 
   var S = {
-    db: null, dl: null, moments: [], loaded: false, fresh: false, slow: false, noDb: false, loadErr: null,
-    userKnown: false, canWrite: false, q: "", kind: "", sort: "desc",
-    editId: null, draft: null, confirm: null, open: {}, busy: false
+    moments: [], storageOk: true, notice: "", q: "", kind: "", sort: "desc",
+    editId: null, draft: null, confirm: null, open: {}, pending: null, lastExport: 0
   };
 
   /* ---------- tiện ích ---------- */
@@ -274,6 +311,7 @@ button, input, select, textarea { font-family: inherit; }
   function todayKey() { return dayKey(Date.now()); }
   function atNoon(key) { var p = key.split("-").map(Number); return new Date(p[0], p[1] - 1, p[2], 12, 0, 0).getTime(); }
   function hhmm(ts) { var d = new Date(ts); return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
+  function fullDate(ts) { var d = new Date(ts); return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + hhmm(ts); }
   function longDate(key) {
     var p = key.split("-").map(Number); var d = new Date(p[0], p[1] - 1, p[2], 12);
     return WEEKDAYS[d.getDay()] + ", " + p[2] + " tháng " + p[1] + (p[0] !== new Date().getFullYear() ? ", " + p[0] : "");
@@ -290,22 +328,82 @@ button, input, select, textarea { font-family: inherit; }
   function readMin(w) { return Math.max(1, Math.round(w / 200)); }
   function fmt(n) { return Number(n).toLocaleString("vi-VN"); }
   function find(id) { for (var i = 0; i < S.moments.length; i++) if (S.moments[i].id === id) return S.moments[i]; return null; }
-  function use(name) {
-    try { return window.claude && window.claude.use ? window.claude.use(name) : Promise.resolve(null); }
-    catch (e) { return Promise.resolve(null); }
+  function newId() {
+    try { if (window.crypto && crypto.randomUUID) return "m-" + crypto.randomUUID(); } catch (e) {}
+    return "m-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   }
 
   var toastT;
   function toast(msg) {
     el.toast.textContent = msg; el.toast.hidden = false;
-    clearTimeout(toastT); toastT = setTimeout(function () { el.toast.hidden = true; }, 3000);
+    clearTimeout(toastT); toastT = setTimeout(function () { el.toast.hidden = true; }, 3200);
   }
-  function failText(e) {
-    var c = e && e.code;
-    if (c === "quota_exceeded") return "Bộ nhớ của trang đã đầy. Hãy tải bản sao lưu rồi xóa bớt moment cũ.";
-    if (c === "resource_exhausted") return "Bạn thao tác hơi nhanh. Thử lại sau vài giây.";
-    if (c === "revoked") return "Quyền truy cập đã thay đổi. Hãy tải lại trang.";
-    return "Chưa lưu được. Nội dung vẫn còn ở đây, hãy thử lại.";
+
+  /* ---------- lưu trữ: localStorage ---------- */
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { S.storageOk = false; return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+  function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+  function persist() {
+    S.storageOk = lsSet(KEY, JSON.stringify(S.moments));
+    renderWarn();
+    return S.storageOk;
+  }
+
+  // Làm sạch một moment đọc từ localStorage hoặc từ file nhập. Trả về null nếu không dùng được.
+  function cleanMoment(x) {
+    if (!x || typeof x !== "object") return null;
+    var body = typeof x.body === "string" ? x.body : "";
+    if (!body.trim()) return null;
+    var createdAt = Number(x.createdAt);
+    if (!isFinite(createdAt) || createdAt <= 0) createdAt = Date.now();
+    var updatedAt = Number(x.updatedAt);
+    if (!isFinite(updatedAt) || updatedAt <= 0) updatedAt = createdAt;
+    return {
+      id: typeof x.id === "string" && x.id && x.id.length <= 100 ? x.id : newId(),
+      title: (typeof x.title === "string" ? x.title : "").slice(0, 120),
+      body: body.slice(0, 60000),
+      kind: (typeof x.kind === "string" ? x.kind : "").slice(0, 40),
+      createdAt: createdAt, updatedAt: updatedAt,
+      dated: !!x.dated, edited: !!x.edited, sample: !!x.sample
+    };
+  }
+  function cleanList(arr) { return arr.map(cleanMoment).filter(Boolean); }
+
+  function readStored() {
+    var raw = lsGet(KEY);
+    if (raw === null) return { state: "none" };
+    try {
+      var j = JSON.parse(raw);
+      if (Array.isArray(j)) return { state: "ok", list: cleanList(j) };
+    } catch (e) {}
+    return { state: "bad", raw: raw };
+  }
+
+  function seed() {
+    var now = Date.now();
+    var y = new Date(); y.setDate(y.getDate() - 1); y.setHours(21, 40, 0, 0);
+    var t = new Date(); t.setDate(t.getDate() - 3); t.setHours(6, 50, 0, 0);
+    return [
+      { id: "vd-1", title: "Cà phê sáng", kind: "Nhật ký", sample: true, createdAt: now - 30 * 60000, updatedAt: now - 30 * 60000, dated: false, edited: false,
+        body: "Sáng nay quán đầu hẻm chưa mở cửa, mình đứng ngoài nhìn bác chủ quán kéo cánh cổng sắt lên. Tiếng sắt lách cách làm cả con hẻm tỉnh dậy.\n\nMình ngồi ở cái bàn nhựa quen thuộc, gọi ly cà phê sữa đá ít đường. Chợt nghĩ những buổi sáng bình thường thế này mới là thứ mình muốn giữ lại nhất." },
+      { id: "vd-2", title: "", kind: "Ghi chép", sample: true, createdAt: y.getTime(), updatedAt: y.getTime(), dated: false, edited: false,
+        body: "Một câu đọc được hôm nay, ghi lại để khỏi quên: viết hay không phải là tìm từ lạ, mà là tìm đúng từ quen.\n\nNgày mai thử viết một đoạn chỉ dùng những từ mình nói hằng ngày." },
+      { id: "vd-3", title: "Mưa đầu tháng", kind: "Thơ", sample: true, createdAt: t.getTime(), updatedAt: t.getTime(), dated: false, edited: false,
+        body: "Mưa rơi trên mái tôn cũ\nnghe như ai gõ cửa nhà\nmở ra chỉ thấy hiên trống\nvà mùi đất ẩm bay xa" }
+    ];
+  }
+
+  function load() {
+    var r = readStored();
+    if (r.state === "ok") { S.moments = r.list; }
+    else if (r.state === "none") { S.moments = seed(); if (S.storageOk) persist(); }
+    else {
+      lsSet(KEY + ".bak", r.raw);
+      S.notice = "Dữ liệu cũ trong trình duyệt bị lỗi nên không đọc được. Bản gốc vẫn được giữ ở khóa mucxanh:moments.bak.";
+      S.moments = [];
+    }
+    var le = Number(lsGet(EXPORT_KEY)); S.lastExport = isFinite(le) ? le : 0;
   }
 
   /* ---------- ô soạn ---------- */
@@ -323,7 +421,7 @@ button, input, select, textarea { font-family: inherit; }
   function updateCount() {
     var t = el.cBody.value;
     el.cCount.textContent = fmt(countWords(t)) + " từ · " + fmt(t.length) + " ký tự";
-    el.cPost.disabled = S.busy || !t.trim() || !S.db;
+    el.cPost.disabled = !t.trim();
   }
   function loadDraft() { try { var r = localStorage.getItem(DRAFT_KEY); return r ? JSON.parse(r) : null; } catch (e) { return null; } }
   function saveDraft() {
@@ -336,22 +434,19 @@ button, input, select, textarea { font-family: inherit; }
   function queueDraft() { clearTimeout(draftT); draftT = setTimeout(saveDraft, 400); }
 
   function post() {
-    if (S.busy || !S.db) return;
     var body = el.cBody.value.trim();
     if (!body) return;
     var key = el.cDate.value || todayKey(), isToday = key === todayKey(), now = Date.now();
-    var rec = {
-      title: el.cTitle.value.trim(), body: body, kind: curKind(),
-      createdAt: isToday ? now : atNoon(key), updatedAt: now, dated: !isToday
-    };
-    S.busy = true; updateCount(); el.cStatus.textContent = "Đang lưu…";
-    S.db.collection("moments").add(rec).then(function () {
-      el.cTitle.value = ""; el.cBody.value = ""; el.cDate.value = todayKey(); setKind(KINDS[0]);
-      try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
-      el.cStatus.textContent = ""; autosize(el.cBody, 6); toast("Đã đăng moment");
-    }).catch(function (e) {
-      el.cStatus.textContent = failText(e);
-    }).then(function () { S.busy = false; updateCount(); });
+    S.moments.push({
+      id: newId(), title: el.cTitle.value.trim(), body: body, kind: curKind(),
+      createdAt: isToday ? now : atNoon(key), updatedAt: now, dated: !isToday, edited: false, sample: false
+    });
+    persist();
+    el.cTitle.value = ""; el.cBody.value = ""; el.cDate.value = todayKey(); setKind(KINDS[0]);
+    lsDel(DRAFT_KEY);
+    el.cStatus.textContent = ""; autosize(el.cBody, 6);
+    toast("Đã đăng moment");
+    render();
   }
 
   /* ---------- sửa, xóa ---------- */
@@ -365,33 +460,25 @@ button, input, select, textarea { font-family: inherit; }
   }
   function saveEdit(id) {
     var m = find(id), d = S.draft;
-    if (S.busy || !m || !d || !S.db) return;
+    if (!m || !d) return;
     var body = d.body.trim();
     if (!body) { toast("Nội dung đang trống."); return; }
-    var patch = { title: d.title.trim(), body: body, kind: d.kind, updatedAt: Date.now(), edited: true, sample: false };
+    m.title = d.title.trim(); m.body = body; m.kind = d.kind; m.updatedAt = Date.now(); m.edited = true; m.sample = false;
     var key = d.date || dayKey(m.createdAt);
     if (key !== dayKey(m.createdAt)) {
       var isToday = key === todayKey();
-      patch.createdAt = isToday ? Date.now() : atNoon(key); patch.dated = !isToday;
+      m.createdAt = isToday ? Date.now() : atNoon(key); m.dated = !isToday;
     }
-    S.busy = true;
-    S.db.doc("moments/" + id).update(patch).then(function () {
-      S.editId = null; S.draft = null; toast("Đã lưu thay đổi");
-    }).catch(function (e) { toast(failText(e)); }).then(function () { S.busy = false; renderList(); });
+    S.editId = null; S.draft = null;
+    persist(); toast("Đã lưu thay đổi"); render();
   }
   function removeMoment(id) {
-    S.confirm = null; renderList();
-    if (!S.db) return;
-    S.db.doc("moments/" + id).delete().then(function () { toast("Đã xóa moment"); })
-      .catch(function (e) { toast(failText(e)); });
+    S.moments = S.moments.filter(function (m) { return m.id !== id; });
+    S.confirm = null; persist(); toast("Đã xóa moment"); render();
   }
   function removeSamples() {
-    var ids = S.moments.filter(function (m) { return m.sample; }).map(function (m) { return m.id; });
-    S.confirm = null; renderList();
-    if (!S.db) return;
-    ids.reduce(function (p, id) { return p.then(function () { return S.db.doc("moments/" + id).delete(); }); }, Promise.resolve())
-      .then(function () { toast("Đã xóa các moment ví dụ"); })
-      .catch(function (e) { toast(failText(e)); });
+    S.moments = S.moments.filter(function (m) { return !m.sample; });
+    S.confirm = null; persist(); toast("Đã xóa các moment ví dụ"); render();
   }
 
   /* ---------- hiển thị ---------- */
@@ -404,14 +491,16 @@ button, input, select, textarea { font-family: inherit; }
     while (set[dayKey(d.getTime())]) { n++; d.setDate(d.getDate() - 1); }
     return n;
   }
+  function renderWarn() {
+    var msgs = [];
+    if (!S.storageOk) msgs.push("Trình duyệt đang chặn lưu trữ, nên moment chỉ giữ được đến khi đóng tab. Hãy bấm Xuất JSON để sao lưu.");
+    if (S.notice) msgs.push(S.notice);
+    el.warn.hidden = !msgs.length;
+    el.warn.textContent = msgs.join(" ");
+  }
   function renderStats() {
-    if (S.noDb || S.loadErr) { el.stats.textContent = ""; return; }
-    if (!S.loaded) { el.stats.textContent = "Đang tải…"; return; }
     var real = realMoments();
-    if (!real.length) {
-      el.stats.textContent = S.canWrite ? "Chưa có moment nào của bạn. Hãy viết moment đầu tiên ở khung bên dưới." : "Chưa có moment nào.";
-      return;
-    }
+    if (!real.length) { el.stats.textContent = "Chưa có moment nào của bạn. Hãy viết moment đầu tiên ở khung bên dưới."; return; }
     var words = real.reduce(function (a, m) { return a + countWords(m.body); }, 0);
     var s = fmt(real.length) + " moment · " + fmt(words) + " từ", st = streak(real);
     if (st >= 2) s += " · viết " + st + " ngày liên tiếp";
@@ -419,7 +508,7 @@ button, input, select, textarea { font-family: inherit; }
   }
 
   function renderTools() {
-    var show = S.loaded && !S.noDb && !S.loadErr && S.moments.length > 0;
+    var show = S.moments.length > 0;
     el.tools.hidden = !show;
     if (!show) return;
     var counts = {}; S.moments.forEach(function (m) { if (m.kind) counts[m.kind] = (counts[m.kind] || 0) + 1; });
@@ -472,12 +561,9 @@ button, input, select, textarea { font-family: inherit; }
     if (!m.dated) meta += '<time class="m-time" datetime="' + new Date(m.createdAt).toISOString() + '">' + hhmm(m.createdAt) + "</time>";
     if (m.kind) meta += '<span class="chip">' + esc(m.kind) + "</span>";
     if (m.sample) meta += '<span class="tag-sample">Ví dụ</span>';
-    var acts = "";
-    if (S.canWrite) {
-      acts = S.confirm === m.id
-        ? '<span class="ask">Xóa moment này?</span><button type="button" class="linkbtn danger" data-act="del-yes">Xóa</button><button type="button" class="linkbtn" data-act="del-no">Giữ lại</button>'
-        : '<button type="button" class="linkbtn" data-act="edit">Sửa</button><button type="button" class="linkbtn" data-act="del">Xóa</button>';
-    }
+    var acts = S.confirm === m.id
+      ? '<span class="ask">Xóa moment này?</span><button type="button" class="linkbtn danger" data-act="del-yes">Xóa</button><button type="button" class="linkbtn" data-act="del-no">Giữ lại</button>'
+      : '<button type="button" class="linkbtn" data-act="edit">Sửa</button><button type="button" class="linkbtn" data-act="del">Xóa</button>';
     return '<article class="moment" data-id="' + esc(m.id) + '">' +
       '<div class="m-meta">' + meta + "</div>" +
       (m.title ? '<h3 class="m-title">' + esc(m.title) + "</h3>" : "") +
@@ -489,16 +575,8 @@ button, input, select, textarea { font-family: inherit; }
 
   function renderList() {
     var h = "";
-    if (S.noDb) {
-      h = note("Không mở được nơi lưu moment ở chế độ xem này.", "Hãy đăng nhập Claude rồi mở lại trang.");
-    } else if (S.loadErr) {
-      h = note("Không tải được các moment.", S.loadErr.code === "revoked" ? "Quyền truy cập đã thay đổi. Hãy tải lại trang." : "Hãy thử tải lại trang.");
-    } else if (!S.loaded) {
-      h = '<div class="note">Đang tải các moment…</div>';
-    } else if (!S.moments.length) {
-      h = S.canWrite
-        ? note("Chưa có moment nào.", "Viết vài dòng vào trang kẻ ở trên rồi bấm Đăng moment.")
-        : note("Chưa có moment nào được đăng.");
+    if (!S.moments.length) {
+      h = note("Chưa có moment nào.", "Viết vài dòng vào trang kẻ ở trên rồi bấm Đăng moment. Nếu đã có file sao lưu, hãy nhập nó ở cuối trang.");
     } else {
       var arr = visible();
       if (!arr.length) {
@@ -517,30 +595,50 @@ button, input, select, textarea { font-family: inherit; }
         }).join("");
       }
       var ns = S.moments.filter(function (m) { return m.sample; }).length;
-      if (ns && S.canWrite) {
+      if (ns) {
         h = '<div class="sample-bar">' + (S.confirm === "samples"
           ? '<span>Xóa ' + ns + ' moment ví dụ?</span><span class="m-actions"><button type="button" class="linkbtn danger" data-act="samples-yes">Xóa</button><button type="button" class="linkbtn" data-act="samples-no">Giữ lại</button></span>'
           : "<span>Đang có moment ví dụ để bạn xem thử.</span>" + '<button type="button" class="linkbtn" data-act="samples">Xóa các ví dụ</button>') + "</div>" + h;
       }
     }
-    if (S.slow && S.loaded && !S.loadErr) h = '<p class="note slow">Chưa kết nối được máy chủ, danh sách có thể chưa mới nhất.</p>' + h;
     el.list.innerHTML = h;
     var ta = $(".m-edit textarea"); if (ta) autosize(ta, 4);
   }
 
-  function renderFoot() {
-    var real = realMoments().length;
-    el.foot.hidden = !(S.canWrite && S.loaded && !S.noDb && real > 0);
-    el.backup.hidden = !S.dl;
+  function renderData() {
+    el.exp.disabled = !S.moments.length;
+    el.expMd.hidden = !realMoments().length;
+    el.lastExp.textContent = S.lastExport ? "Lần xuất gần nhất: " + fullDate(S.lastExport) + "." : "Bạn chưa xuất bản sao lưu nào.";
+    var p = S.pending;
+    el.impPanel.hidden = !p;
+    if (p) {
+      el.impSum.textContent = "Tìm thấy " + fmt(p.list.length) + " moment trong file" + (p.dup ? " (" + fmt(p.dup) + " moment trùng với moment đang có)" : "") +
+        (p.skipped ? ", bỏ qua " + fmt(p.skipped) + " mục không hợp lệ" : "") + ".";
+      el.impWarn.textContent = "Gộp giữ lại moment đang có và thêm moment trong file; moment trùng thì giữ bản sửa sau cùng. Thay thế sẽ xóa " +
+        fmt(S.moments.length) + " moment đang có trong trình duyệt này.";
+    }
   }
 
   function render() {
-    el.composer.hidden = !S.canWrite || S.noDb;
-    el.ro.hidden = !(S.userKnown && !S.canWrite && S.loaded && !S.noDb && !S.loadErr);
-    renderStats(); renderTools(); renderList(); renderFoot(); updateCount();
+    renderWarn(); renderStats(); renderTools(); renderList(); renderData(); updateCount();
   }
 
-  /* ---------- sao lưu ---------- */
+  /* ---------- xuất, nhập ---------- */
+  function saveFile(name, text, type) {
+    var blob = new Blob([text], { type: type + ";charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = name; a.style.display = "none";
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { a.remove(); URL.revokeObjectURL(url); }, 1500);
+  }
+  function exportJson() {
+    if (!S.moments.length) { toast("Chưa có moment nào để xuất."); return; }
+    var data = { app: "muc-xanh", version: 1, exportedAt: new Date().toISOString(), moments: S.moments };
+    saveFile("muc-xanh-" + todayKey() + ".json", JSON.stringify(data, null, 2), "application/json");
+    S.lastExport = Date.now(); lsSet(EXPORT_KEY, String(S.lastExport));
+    renderData(); toast("Đã xuất " + fmt(S.moments.length) + " moment ra file JSON");
+  }
   function backupText() {
     var real = realMoments().sort(function (a, b) { return a.createdAt - b.createdAt; });
     var out = ["# Mực Xanh: bản sao lưu", "", "Xuất ngày " + longDate(todayKey()) + " · " + real.length + " moment", ""];
@@ -551,14 +649,43 @@ button, input, select, textarea { font-family: inherit; }
     });
     return out.join("\n");
   }
-  function backup() {
-    if (!S.dl || !realMoments().length) return;
-    S.dl.save({ filename: "muc-xanh-" + todayKey() + ".md", data: backupText() }).then(function () {
-      toast("Đã tải bản sao lưu");
-    }).catch(function (e) {
-      if (e && e.code === "declined") return;
-      toast("Không tải được bản sao lưu ở chế độ xem này.");
-    });
+  function exportMd() {
+    if (!realMoments().length) return;
+    saveFile("muc-xanh-" + todayKey() + ".md", backupText(), "text/markdown");
+    toast("Đã xuất file .md");
+  }
+
+  function parseImport(text) {
+    var j;
+    try { j = JSON.parse(text); } catch (e) { toast("File này không đọc được. Hãy chọn file JSON do Mực Xanh xuất ra."); return; }
+    var arr = Array.isArray(j) ? j : (j && Array.isArray(j.moments) ? j.moments : null);
+    if (!arr) { toast("File này không phải bản sao lưu của Mực Xanh."); return; }
+    var list = cleanList(arr), seen = {};
+    list = list.filter(function (m) { if (seen[m.id]) return false; seen[m.id] = 1; return true; });
+    if (!list.length) { toast("Không tìm thấy moment hợp lệ nào trong file."); return; }
+    var dup = 0; list.forEach(function (m) { if (find(m.id)) dup++; });
+    S.pending = { list: list, dup: dup, skipped: arr.length - list.length };
+    renderData();
+    el.impPanel.scrollIntoView({ block: "nearest" });
+  }
+  function applyImport(mode) {
+    var p = S.pending; if (!p) return;
+    var added = 0, updated = 0;
+    if (mode === "replace") {
+      S.moments = p.list.slice(); added = p.list.length;
+    } else {
+      var idx = {}; S.moments.forEach(function (m, i) { idx[m.id] = i; });
+      p.list.forEach(function (m) {
+        if (m.id in idx) {
+          if (m.updatedAt > S.moments[idx[m.id]].updatedAt) { S.moments[idx[m.id]] = m; updated++; }
+        } else { S.moments.push(m); idx[m.id] = S.moments.length - 1; added++; }
+      });
+    }
+    S.pending = null; S.editId = null; S.draft = null; S.confirm = null; S.notice = "";
+    persist(); render();
+    toast(mode === "replace"
+      ? "Đã thay thế bằng " + fmt(added) + " moment"
+      : "Đã nhập " + fmt(added) + " moment mới" + (updated ? ", cập nhật " + fmt(updated) : ""));
   }
 
   /* ---------- sự kiện ---------- */
@@ -589,7 +716,26 @@ button, input, select, textarea { font-family: inherit; }
     var b = e.target.closest("[data-kind]"); if (!b) return;
     S.kind = b.getAttribute("data-kind"); renderTools(); renderList();
   });
-  el.backup.addEventListener("click", backup);
+
+  el.exp.addEventListener("click", exportJson);
+  el.expMd.addEventListener("click", exportMd);
+  el.imp.addEventListener("click", function () { el.impFile.click(); });
+  el.impFile.addEventListener("change", function () {
+    var f = el.impFile.files && el.impFile.files[0];
+    el.impFile.value = "";
+    if (!f) return;
+    if (f.size > 30 * 1024 * 1024) { toast("File quá lớn (trên 30 MB)."); return; }
+    var r = new FileReader();
+    r.onload = function () { parseImport(String(r.result)); };
+    r.onerror = function () { toast("Không đọc được file."); };
+    r.readAsText(f);
+  });
+  el.impPanel.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-imp]"); if (!b) return;
+    var a = b.getAttribute("data-imp");
+    if (a === "cancel") { S.pending = null; renderData(); }
+    else applyImport(a);
+  });
 
   el.list.addEventListener("submit", function (e) { e.preventDefault(); });
   el.list.addEventListener("click", function (e) {
@@ -614,49 +760,31 @@ button, input, select, textarea { font-family: inherit; }
   el.list.addEventListener("input", onEditField);
   el.list.addEventListener("change", onEditField);
 
+  // Đồng bộ khi mở trang ở tab khác và dữ liệu đổi ở đó
+  window.addEventListener("storage", function (e) {
+    if (e.key !== null && e.key !== KEY) return;
+    var r = readStored();
+    S.moments = r.state === "ok" ? r.list : [];
+    if (S.editId && !find(S.editId)) { S.editId = null; S.draft = null; }
+    S.confirm = null; render();
+  });
+
   window.addEventListener("resize", function () {
-    if (!el.composer.hidden) autosize(el.cBody, 6);
+    autosize(el.cBody, 6);
     var t = $(".m-edit textarea"); if (t) autosize(t, 4);
   });
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () {
-      if (!el.composer.hidden) autosize(el.cBody, 6);
+      autosize(el.cBody, 6);
       var t = $(".m-edit textarea"); if (t) autosize(t, 4);
     });
   }
 
   /* ---------- khởi động ---------- */
+  load();
   render();
-
-  use("user").then(function (u) { return u ? u.canEdit() : false; }).catch(function () { return false; }).then(function (ok) {
-    S.userKnown = true; S.canWrite = !!ok; render();
-    if (S.canWrite) autosize(el.cBody, 6);
-  });
-
-  use("downloads").then(function (d) { S.dl = d || null; renderFoot(); }).catch(function () {});
-
-  use("db").then(function (db) {
-    if (!db) { S.noDb = true; render(); return; }
-    S.db = db;
-    var slowT = setTimeout(function () { if (!S.fresh) { S.slow = true; renderList(); } }, 10000);
-    db.collection("moments").onSnapshot(function (snap) {
-      S.moments = snap.docs.map(function (d) {
-        var x = d.data() || {};
-        return {
-          id: d.id, title: String(x.title || ""), body: String(x.body || ""), kind: String(x.kind || ""),
-          createdAt: Number(x.createdAt) || 0, updatedAt: Number(x.updatedAt) || 0,
-          dated: !!x.dated, edited: !!x.edited, sample: !!x.sample
-        };
-      });
-      S.loaded = true; S.loadErr = null;
-      if (!snap.metadata.fromCache) { S.fresh = true; S.slow = false; clearTimeout(slowT); }
-      if (S.editId && !find(S.editId)) { S.editId = null; S.draft = null; }
-      render();
-    }, function (err) {
-      clearTimeout(slowT); S.loaded = true; S.loadErr = err || { code: "unavailable" }; render();
-    });
-  }).catch(function () { S.noDb = true; render(); });
+  autosize(el.cBody, 6);
 })();
 </script>
-
-</body></html>
+</body>
+</html>
